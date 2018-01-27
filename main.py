@@ -1,42 +1,43 @@
-# Copyright 2016 Google Inc.
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-# [START app]
+"""`main` is the top level module for your Flask application."""
 
 # Imports
 import os
 import jinja2
 import webapp2
 import logging
-from flask import Flask
+
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
     extensions=['jinja2.ext.autoescape'],
     autoescape=True)
 
+# Import the Flask Framework
+from flask import Flask, request
 app = Flask(__name__)
 
+# Note: We don't need to call run() since our application is embedded within
+# the App Engine WSGI application server.
+
 @app.route('/')
-def hello():
+def index():
     template = JINJA_ENVIRONMENT.get_template('templates/index.html')
+
+    # render the web page with the data 
     return template.render()
+
+    
+@app.route('/about')
+def about():
+    template = JINJA_ENVIRONMENT.get_template('templates/about.html')
+    return template.render()
+
+@app.errorhandler(404)
+def page_not_found(e):
+    """Return a custom 404 error."""
+    return 'Sorry, Nothing at this URL.', 404
 
 
 @app.errorhandler(500)
-def server_error(e):
-    # Log the error and stacktrace.
-    logging.exception('An error occurred during a request.')
-    return 'An internal error occurred.', 500
-    
-# [END app]
+def application_error(e):
+    """Return a custom 500 error."""
+    return 'Sorry, unexpected error: {}'.format(e), 500

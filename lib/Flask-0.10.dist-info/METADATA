@@ -6,7 +6,6 @@ Home-page: http://github.com/mitsuhiko/flask/
 Author: Armin Ronacher
 Author-email: armin.ronacher@active-4.com
 License: BSD
-Description-Content-Type: UNKNOWN
 Platform: any
 Classifier: Development Status :: 4 - Beta
 Classifier: Environment :: Web Environment
